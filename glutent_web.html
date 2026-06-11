@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gluten't — Gluten Free Market</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #0F6E56;
+      --green-light: #E1F5EE;
+      --green-dark: #085041;
+      --green-soft: #9FE1CB;
+      --bg: #ffffff;
+      --bg-secondary: #f5f5f3;
+      --text: #1a1a1a;
+      --text-secondary: #6b6b6b;
+      --text-tertiary: #a0a0a0;
+      --border: rgba(0,0,0,0.12);
+    }
+
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
+
+    /* NAV */
+    nav {
+      background: var(--bg);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo { font-size: 18px; font-weight: 500; color: var(--green); cursor: pointer; }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-link {
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 4px 0;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--green); border-bottom-color: var(--green); }
+    .nav-cta {
+      background: var(--green);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 8px;
+      padding: 7px 16px;
+      cursor: pointer;
+      border: none;
+    }
+
+    /* PAGES */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* HERO */
+    .hero { background: var(--green); padding: 64px 32px; text-align: center; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      color: var(--green-light);
+      font-size: 11px;
+      border-radius: 20px;
+      padding: 4px 14px;
+      margin-bottom: 16px;
+    }
+    .hero-title { font-size: 32px; font-weight: 500; color: #fff; line-height: 1.2; margin-bottom: 12px; }
+    .hero-sub { font-size: 14px; color: var(--green-soft); line-height: 1.6; max-width: 480px; margin: 0 auto 24px; }
+    .hero-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--green-light); color: var(--green); font-size: 13px; font-weight: 500; border-radius: 8px; padding: 10px 22px; cursor: pointer; border: none; }
+    .btn-secondary { background: transparent; color: var(--green-light); font-size: 13px; border-radius: 8px; padding: 10px 22px; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); }
+
+    /* TRUST BAR */
+    .trust-bar {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      padding: 20px 32px;
+      border-bottom: 0.5px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .trust-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); }
+    .trust-icon { color: var(--green); font-size: 16px; }
+
+    /* SECTIONS */
+    .section { padding: 48px 32px; }
+    .section-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--green); margin-bottom: 8px; }
+    .section-title { font-size: 22px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
+    .section-sub { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 28px; }
+
+    /* PRODUCTS */
+    .featured-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
+    .prod-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: border-color 0.15s; }
+    .prod-card:hover { border-color: var(--green); }
+    .prod-img { height: 120px; display: flex; align-items: center; justify-content: center; font-size: 48px; }
+    .prod-body { padding: 12px; }
+    .prod-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+    .prod-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 8px; }
+    .prod-footer { display: flex; align-items: center; justify-content: space-between; }
+    .prod-price { font-size: 14px; font-weight: 500; color: var(--green); }
+    .prod-cert { font-size: 9px; background: var(--green-light); color: var(--green-dark); border-radius: 20px; padding: 2px 7px; }
+    .prod-add { background: var(--green); color: #fff; font-size: 11px; border: none; border-radius: 6px; padding: 5px 10px; cursor: pointer; width: 100%; margin-top: 8px; }
+
+    /* CATEGORY FILTERS */
+    .cats { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .cat-btn { font-size: 12px; border: 0.5px solid var(--border); border-radius: 20px; padding: 5px 14px; cursor: pointer; background: transparent; color: var(--text-secondary); transition: all 0.15s; }
+    .cat-btn:hover, .cat-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+    .about-visual { background: var(--green-light); border-radius: 12px; height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+    .about-emoji { font-size: 56px; }
+    .about-tagline { font-size: 13px; color: var(--green-dark); font-weight: 500; }
+    .pillar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+    .pillar { background: var(--bg-secondary); border-radius: 10px; padding: 12px; }
+    .pillar-icon { color: var(--green); font-size: 20px; margin-bottom: 6px; }
+    .pillar-title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+    .pillar-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.4; }
+    .team-card { background: var(--bg-secondary); border-radius: 10px; padding: 14px; display: flex; align-items: center; gap: 12px; margin-top: 16px; }
+    .team-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; font-weight: 500; flex-shrink: 0; }
+    .team-name { font-size: 13px; font-weight: 500; color: var(--text); }
+    .team-role { font-size: 11px; color: var(--text-secondary); }
+
+    /* TESTIMONIALS */
+    .test-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+    .test-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: 12px; padding: 16px; }
+    .test-stars { color: #EF9F27; font-size: 14px; margin-bottom: 8px; }
+    .test-text { font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 10px; font-style: italic; }
+    .test-author { display: flex; align-items: center; gap: 8px; }
+    .test-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--green-dark); }
+    .test-name { font-size: 12px; font-weight: 500; color: var(--text); }
+    .test-city { font-size: 11px; color: var(--text-tertiary); }
+    .test-badge { font-size: 9px; background: var(--green-light); color: var(--green-dark); border-radius: 20px; padding: 2px 7px; margin-left: auto; }
+
+    /* CONTACT */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .contact-card { background: var(--bg-secondary); border-radius: 12px; padding: 20px; }
+    .contact-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 12px; }
+    .contact-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 13px; color: var(--text-secondary); }
+    .contact-icon { color: var(--green); font-size: 18px; }
+    .form-group { margin-bottom: 12px; }
+    .form-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; display: block; }
+    .form-input { width: 100%; border: 0.5px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13px; font-family: inherit; background: var(--bg); color: var(--text); }
+    .form-textarea { width: 100%; border: 0.5px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13px; font-family: inherit; background: var(--bg); color: var(--text); resize: vertical; min-height: 80px; }
+    .form-btn { background: var(--green); color: #fff; font-size: 13px; font-weight: 500; border: none; border-radius: 8px; padding: 10px 20px; cursor: pointer; width: 100%; }
+
+    /* KIT SECTION */
+    .kit-section { background: var(--bg-secondary); }
+
+    /* CHATBOT */
+    .chat-bubble { position: fixed; bottom: 24px; right: 24px; z-index: 200; }
+    .chat-btn { width: 50px; height: 50px; border-radius: 50%; background: var(--green); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; box-shadow: 0 2px 12px rgba(15,110,86,0.3); }
+    .chat-window { position: absolute; bottom: 62px; right: 0; width: 280px; background: var(--bg); border: 0.5px solid var(--border); border-radius: 12px; overflow: hidden; display: none; box-shadow: 0 4px 24px rgba(0,0,0,0.1); }
+    .chat-window.open { display: block; }
+    .chat-head { background: var(--green); padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
+    .chat-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .chat-head-name { font-size: 13px; font-weight: 500; color: #fff; }
+    .chat-head-sub { font-size: 10px; color: var(--green-soft); }
+    .chat-messages { padding: 12px; height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+    .msg { max-width: 85%; padding: 7px 10px; border-radius: 10px; font-size: 12px; line-height: 1.5; }
+    .msg-bot { background: var(--bg-secondary); color: var(--text); align-self: flex-start; border-radius: 0 10px 10px 10px; }
+    .msg-user { background: var(--green); color: #fff; align-self: flex-end; border-radius: 10px 0 10px 10px; }
+    .chat-suggestions { padding: 0 12px 8px; display: flex; flex-direction: column; gap: 4px; }
+    .chat-sug { font-size: 11px; border: 0.5px solid var(--green); color: var(--green); border-radius: 20px; padding: 4px 10px; cursor: pointer; background: transparent; text-align: left; }
+    .chat-input-row { display: flex; gap: 6px; padding: 8px 10px; border-top: 0.5px solid var(--border); }
+    .chat-input { flex: 1; border: 0.5px solid var(--border); border-radius: 20px; padding: 6px 12px; font-size: 12px; font-family: inherit; background: var(--bg); color: var(--text); }
+    .chat-send { background: var(--green); color: #fff; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+
+    /* FOOTER */
+    footer { background: var(--bg-secondary); border-top: 0.5px solid var(--border); padding: 24px 32px; text-align: center; font-size: 12px; color: var(--text-tertiary); }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      nav { padding: 0 16px; }
+      .nav-links { gap: 12px; }
+      .nav-link { font-size: 11px; }
+      .hero { padding: 40px 16px; }
+      .hero-title { font-size: 24px; }
+      .section { padding: 32px 16px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .trust-bar { gap: 16px; padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">Gluten't</div>
+  <div class="nav-links">
+    <div class="nav-link active" id="nl-home" onclick="showPage('home')">Inicio</div>
+    <div class="nav-link" id="nl-productos" onclick="showPage('productos')">Productos</div>
+    <div class="nav-link" id="nl-nosotros" onclick="showPage('nosotros')">Nosotros</div>
+    <div class="nav-link" id="nl-testimonios" onclick="showPage('testimonios')">Testimonios</div>
+    <div class="nav-link" id="nl-contacto" onclick="showPage('contacto')">Contacto</div>
+  </div>
+  <button class="nav-cta" onclick="showPage('productos')">Ver productos</button>
+</nav>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-badge">Gluten Free Market</div>
+    <h1 class="hero-title">Elegí sin gluten,<br>elegí bienestar.</h1>
+    <p class="hero-sub">Tu tienda online de productos sin TACC. Todos certificados, envíos a todo el país y atención personalizada.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('productos')">Ver productos</button>
+      <button class="btn-secondary" onclick="showPage('nosotros')">Conocer la marca</button>
+    </div>
+  </div>
+
+  <div class="trust-bar">
+    <div class="trust-item"><i class="ti ti-rosette-discount-check trust-icon"></i>100% certificados sin TACC</div>
+    <div class="trust-item"><i class="ti ti-truck trust-icon"></i>Envíos a todo el país</div>
+    <div class="trust-item"><i class="ti ti-lock trust-icon"></i>Pago seguro con Mercado Pago</div>
+    <div class="trust-item"><i class="ti ti-message-circle trust-icon"></i>Atención por WhatsApp</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Destacados</div>
+    <h2 class="section-title">Productos estrella</h2>
+    <p class="section-sub">Los más elegidos por nuestra comunidad sin TACC.</p>
+    <div class="featured-grid">
+      <div class="prod-card">
+        <div class="prod-img" style="background:#E1F5EE;">🌾🫐</div>
+        <div class="prod-body">
+          <div class="prod-name">Granola sin TACC</div>
+          <div class="prod-desc">Frutos rojos, miel y avena libre de gluten.</div>
+          <div class="prod-footer"><span class="prod-price">$3.500</span><span class="prod-cert">✓ Apto celíaco</span></div>
+          <button class="prod-add">Agregar al carrito</button>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background:#E6F1FB;">💪🥣</div>
+        <div class="prod-body">
+          <div class="prod-name">Premezcla proteica</div>
+          <div class="prod-desc">Sin TACC, alta en proteína para repostería.</div>
+          <div class="prod-footer"><span class="prod-price">$4.200</span><span class="prod-cert">✓ Apto celíaco</span></div>
+          <button class="prod-add">Agregar al carrito</button>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background:#FAEEDA;">🍫🍪</div>
+        <div class="prod-body">
+          <div class="prod-name">Galletitas de avena</div>
+          <div class="prod-desc">Sin azúcar añadida, sin gluten. Snack ideal.</div>
+          <div class="prod-footer"><span class="prod-price">$2.800</span><span class="prod-cert">✓ Apto celíaco</span></div>
+          <button class="prod-add">Agregar al carrito</button>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background:#E1F5EE;">🌾</div>
+        <div class="prod-body">
+          <div class="prod-name">Harina sin TACC</div>
+          <div class="prod-desc">Versátil y certificada para todas tus recetas.</div>
+          <div class="prod-footer"><span class="prod-price">$3.100</span><span class="prod-cert">✓ Apto celíaco</span></div>
+          <button class="prod-add">Agregar al carrito</button>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:8px;">
+      <button onclick="showPage('productos')" style="font-size:13px;border:0.5px solid #ccc;border-radius:8px;padding:9px 20px;background:transparent;cursor:pointer;color:#6b6b6b;">Ver todos los productos</button>
+    </div>
+  </div>
+
+  <div class="section kit-section">
+    <div style="text-align:center;max-width:500px;margin:0 auto;">
+      <div class="section-label" style="text-align:center;">Kit especial</div>
+      <h2 class="section-title" style="text-align:center;">Kit de Inicio sin TACC</h2>
+      <p class="section-sub" style="text-align:center;">Para celíacos recién diagnosticados. 4 productos esenciales con 10% OFF.</p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:20px;">
+        <span style="font-size:24px;font-weight:500;color:#0F6E56;">$12.240</span>
+        <span style="font-size:14px;color:#a0a0a0;text-decoration:line-through;">$13.600</span>
+        <span style="font-size:11px;background:#E1F5EE;color:#085041;border-radius:20px;padding:3px 10px;">10% OFF</span>
+      </div>
+      <button style="background:#0F6E56;color:#fff;font-size:13px;font-weight:500;border:none;border-radius:8px;padding:10px 22px;cursor:pointer;">Pedir mi Kit de Inicio</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTOS -->
+<div id="page-productos" class="page">
+  <div class="section">
+    <div class="section-label">Catálogo</div>
+    <h2 class="section-title">Todos los productos</h2>
+    <p class="section-sub">Todos certificados apto celíaco por ANMAT.</p>
+    <div class="cats">
+      <button class="cat-btn active" onclick="filterCat('todos',this)">Todos</button>
+      <button class="cat-btn" onclick="filterCat('desayuno',this)">Desayuno</button>
+      <button class="cat-btn" onclick="filterCat('harinas',this)">Harinas</button>
+      <button class="cat-btn" onclick="filterCat('snacks',this)">Snacks</button>
+      <button class="cat-btn" onclick="filterCat('pastas',this)">Pastas</button>
+    </div>
+    <div class="featured-grid" id="prod-grid">
+      <div class="prod-card" data-cat="desayuno"><div class="prod-img" style="background:#E1F5EE;">🌾🫐</div><div class="prod-body"><div class="prod-name">Granola sin TACC</div><div class="prod-desc">Frutos rojos, miel y avena libre de gluten.</div><div class="prod-footer"><span class="prod-price">$3.500</span><span class="prod-cert">✓ Apto celíaco</span></div><button class="prod-add">Agregar al carrito</button></div></div>
+      <div class="prod-card" data-cat="harinas"><div class="prod-img" style="background:#E6F1FB;">💪🥣</div><div class="prod-body"><div class="prod-name">Premezcla proteica</div><div class="prod-desc">Sin TACC, alta en proteína para repostería.</div><div class="prod-footer"><span class="prod-price">$4.200</span><span class="prod-cert">✓ Apto celíaco</span></div><button class="prod-add">Agregar al carrito</button></div></div>
+      <div class="prod-card" data-cat="snacks"><div class="prod-img" style="background:#FAEEDA;">🍫🍪</div><div class="prod-body"><div class="prod-name">Galletitas de avena</div><div class="prod-desc">Sin azúcar añadida, sin gluten. Snack ideal.</div><div class="prod-footer"><span class="prod-price">$2.800</span><span class="prod-cert">✓ Apto celíaco</span></div><button class="prod-add">Agregar al carrito</button></div></div>
+      <div class="prod-card" data-cat="harinas"><div class="prod-img" style="background:#E1F5EE;">🌾</div><div class="prod-body"><div class="prod-name">Harina sin TACC</div><div class="prod-desc">Versátil y certificada para todas tus recetas.</div><div class="prod-footer"><span class="prod-price">$3.100</span><span class="prod-cert">✓ Apto celíaco</span></div><button class="prod-add">Agregar al carrito</button></div></div>
+      <div class="prod-card" data-cat="pastas"><div class="prod-img" style="background:#EEEDFE;">🍝</div><div class="prod-body"><div class="prod-name">Pasta sin TACC</div><div class="prod-desc">Fideos de arroz certificados. Textura perfecta.</div><div class="prod-footer"><span class="prod-price">$2.400</span><span class="prod-cert">✓ Apto celíaco</span></div><button class="prod-add">Agregar al carrito</button></div></div>
+      <div class="prod-card" data-cat="desayuno"><div class="prod-img" style="background:#FAEEDA;">🥞</div><div class="prod-body"><div class="prod-name">Mezcla para panqueques</div><div class="prod-desc">Lista para usar, sin TACC, esponjosa y rica.</div><div class="prod-footer"><span class="prod-price">$2.900</span><span class="prod-cert">✓ Apto celíaco</span></div><button class="prod-add">Agregar al carrito</button></div></div>
+      <div class="prod-card" data-cat="snacks"><div class="prod-img" style="background:#E1F5EE;">🍿</div><div class="prod-body"><div class="prod-name">Snack de arroz inflado</div><div class="prod-desc">Liviano, crocante y 100% sin gluten.</div><div class="prod-footer"><span class="prod-price">$1.800</span><span class="prod-cert">✓ Apto celíaco</span></div><button class="prod-add">Agregar al carrito</button></div></div>
+      <div class="prod-card" data-cat="harinas"><div class="prod-img" style="background:#FCEBEB;">🫙</div><div class="prod-body"><div class="prod-name">Premezcla para pan</div><div class="prod-desc">Pan casero sin TACC, fácil y esponjoso.</div><div class="prod-footer"><span class="prod-price">$3.800</span><span class="prod-cert">✓ Apto celíaco</span></div><button class="prod-add">Agregar al carrito</button></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NOSOTROS -->
+<div id="page-nosotros" class="page">
+  <div class="section">
+    <div class="about-grid">
+      <div>
+        <div class="section-label">Nuestra historia</div>
+        <h2 class="section-title">Nació de una necesidad real</h2>
+        <p class="section-sub">Gluten't nació de la dificultad de encontrar productos sin TACC confiables, variados y accesibles en un solo lugar. Entendemos que comer sin gluten no es una moda: es una necesidad y un estilo de vida.</p>
+        <p class="section-sub">Nuestra misión es simplificar la experiencia de compra para celíacos e intolerantes al gluten, ofreciendo productos 100% certificados con la transparencia y la atención que merecen.</p>
+        <div class="pillar-grid">
+          <div class="pillar"><i class="ti ti-shield-check pillar-icon"></i><div class="pillar-title">Seguridad alimentaria</div><div class="pillar-desc">Solo productos certificados por ANMAT.</div></div>
+          <div class="pillar"><i class="ti ti-box pillar-icon"></i><div class="pillar-title">Accesibilidad</div><div class="pillar-desc">Todo en un solo lugar, sin buscar más.</div></div>
+          <div class="pillar"><i class="ti ti-heart pillar-icon"></i><div class="pillar-title">Comunidad</div><div class="pillar-desc">Acompañamos a cada celíaco en su camino.</div></div>
+          <div class="pillar"><i class="ti ti-truck pillar-icon"></i><div class="pillar-title">Envíos confiables</div><div class="pillar-desc">A todo el país, rápido y seguro.</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="about-visual">
+          <div class="about-emoji">🌾</div>
+          <div class="about-tagline">Gluten't — Gluten Free Market</div>
+          <div style="font-size:11px;color:#0F6E56;margin-top:4px;">"Elegí sin gluten, elegí bienestar"</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">G5</div>
+          <div>
+            <div class="team-name">Grupo 5</div>
+            <div class="team-role">Curamil · Dinamarca · Rivarola · Romero</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIOS -->
+<div id="page-testimonios" class="page">
+  <div class="section">
+    <div class="section-label">Comunidad</div>
+    <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+    <p class="section-sub">Más de 200 celíacos ya confiaron en Gluten't para su compra.</p>
+    <div class="test-grid">
+      <div class="test-card"><div class="test-stars">★★★★★</div><div class="test-text">"Por fin una tienda donde confío 100% en los productos. Llegó todo perfecto y bien empacado."</div><div class="test-author"><div class="test-avatar">VA</div><div><div class="test-name">Valentina A.</div><div class="test-city">Córdoba</div></div><span class="test-badge">Celíaca</span></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><div class="test-text">"El kit de inicio fue lo mejor para arrancar. No tuve que buscar nada por separado. Todo certificado."</div><div class="test-author"><div class="test-avatar">RM</div><div><div class="test-name">Romina M.</div><div class="test-city">Buenos Aires</div></div><span class="test-badge">Celíaca</span></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><div class="test-text">"La granola es increíble. Llegó en 3 días y el empaque estaba impecable. Ya hice mi segundo pedido."</div><div class="test-author"><div class="test-avatar">MG</div><div><div class="test-name">Martín G.</div><div class="test-city">Rosario</div></div><span class="test-badge">Saludable</span></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><div class="test-text">"Me diagnosticaron hace 2 meses y este kit me salvó los primeros días. Mil gracias Gluten't."</div><div class="test-author"><div class="test-avatar">LP</div><div><div class="test-name">Laura P.</div><div class="test-city">Mendoza</div></div><span class="test-badge">Celíaca</span></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><div class="test-text">"Nunca había encontrado tanta variedad sin TACC en un solo lugar. Los precios son muy accesibles."</div><div class="test-author"><div class="test-avatar">SC</div><div><div class="test-name">Sofía C.</div><div class="test-city">Tucumán</div></div><span class="test-badge">Intolerante</span></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><div class="test-text">"El chatbot Gluti me resolvió todas las dudas sobre los ingredientes antes de comprar. Excelente atención."</div><div class="test-author"><div class="test-avatar">FN</div><div><div class="test-name">Federico N.</div><div class="test-city">Salta</div></div><span class="test-badge">Celíaco</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACTO -->
+<div id="page-contacto" class="page">
+  <div class="section">
+    <div class="section-label">Contacto</div>
+    <h2 class="section-title">Estamos para ayudarte</h2>
+    <p class="section-sub">Cualquier duda sobre productos, envíos o tu pedido, escribinos.</p>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-title">Medios de contacto</div>
+        <div class="contact-item"><i class="ti ti-brand-whatsapp contact-icon"></i>WhatsApp: +54 9 351 000-0000</div>
+        <div class="contact-item"><i class="ti ti-mail contact-icon"></i>hola@glutent.com.ar</div>
+        <div class="contact-item"><i class="ti ti-brand-instagram contact-icon"></i>@glutent.oficial</div>
+        <div class="contact-item"><i class="ti ti-clock contact-icon"></i>Lun a Vie · 9 a 18hs</div>
+        <div style="margin-top:16px;background:#E1F5EE;border-radius:10px;padding:12px 14px;">
+          <div style="font-size:12px;font-weight:500;color:#085041;margin-bottom:4px;">Gluti — tu asistente sin TACC</div>
+          <div style="font-size:11px;color:#0F6E56;line-height:1.5;">Hacé click en el botón verde de la esquina para chatear con Gluti y resolver tus dudas al instante.</div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-title">Envianos un mensaje</div>
+        <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" placeholder="Tu nombre" type="text"></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" placeholder="tu@email.com" type="email"></div>
+        <div class="form-group"><label class="form-label">Mensaje</label><textarea class="form-textarea" placeholder="¿En qué te podemos ayudar?"></textarea></div>
+        <button class="form-btn">Enviar mensaje</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>Gluten't — Gluten Free Market · Todos los productos certificados sin TACC · glutent.com.ar</footer>
+
+<!-- CHATBOT GLUTI -->
+<div class="chat-bubble" id="chat-bubble">
+  <div class="chat-window" id="chat-win">
+    <div class="chat-head">
+      <div class="chat-avatar">🌾</div>
+      <div>
+        <div class="chat-head-name">Gluti</div>
+        <div class="chat-head-sub">Tu amigo sin TACC · En línea</div>
+      </div>
+      <i class="ti ti-x" style="margin-left:auto;color:#fff;cursor:pointer;font-size:16px;" onclick="toggleChat()"></i>
+    </div>
+    <div class="chat-messages" id="chat-msgs">
+      <div class="msg msg-bot">Hola! Soy Gluti, tu asistente sin TACC. En qué te puedo ayudar hoy?</div>
+    </div>
+    <div class="chat-suggestions" id="chat-sugs">
+      <button class="chat-sug" onclick="chatSug('Son todos los productos aptos para celiacos?')">Son todos aptos para celíacos?</button>
+      <button class="chat-sug" onclick="chatSug('Como funcionan los envios?')">Cómo funcionan los envíos?</button>
+      <button class="chat-sug" onclick="chatSug('Que incluye el kit de inicio?')">Qué incluye el kit de inicio?</button>
+    </div>
+    <div class="chat-input-row">
+      <input class="chat-input" id="chat-input" placeholder="Escribí tu consulta..." onkeydown="if(event.key==='Enter')sendMsg()">
+      <button class="chat-send" onclick="sendMsg()"><i class="ti ti-send"></i></button>
+    </div>
+  </div>
+  <button class="chat-btn" onclick="toggleChat()">
+    <i class="ti ti-message-circle"></i>
+  </button>
+</div>
+
+<script>
+  const pages = ['home','productos','nosotros','testimonios','contacto'];
+
+  function showPage(id) {
+    pages.forEach(p => {
+      document.getElementById('page-' + p).classList.toggle('active', p === id);
+      const nl = document.getElementById('nl-' + p);
+      if (nl) nl.classList.toggle('active', p === id);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  function filterCat(cat, btn) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#prod-grid .prod-card').forEach(c => {
+      c.style.display = (cat === 'todos' || c.dataset.cat === cat) ? '' : 'none';
+    });
+  }
+
+  function toggleChat() {
+    document.getElementById('chat-win').classList.toggle('open');
+  }
+
+  const botReplies = {
+    'Son todos los productos aptos para celiacos?': 'Si! Todos nuestros productos tienen certificacion apto celiaco de ANMAT. Sin excepciones.',
+    'Como funcionan los envios?': 'Enviamos a todo el pais. El tiempo estimado es de 3 a 5 dias habiles segun la zona. El costo se calcula al finalizar la compra.',
+    'Que incluye el kit de inicio?': 'El kit incluye Granola sin TACC, Premezcla proteica, Galletitas de avena y Harina sin TACC. Todo certificado y con 10% OFF.'
+  };
+
+  function chatSug(text) {
+    addMsg(text, 'user');
+    document.getElementById('chat-sugs').style.display = 'none';
+    setTimeout(() => {
+      const r = botReplies[text] || 'Gracias por tu consulta! Te respondo a la brevedad por WhatsApp.';
+      addMsg(r, 'bot');
+    }, 600);
+  }
+
+  function sendMsg() {
+    const inp = document.getElementById('chat-input');
+    const text = inp.value.trim();
+    if (!text) return;
+    addMsg(text, 'user');
+    inp.value = '';
+    document.getElementById('chat-sugs').style.display = 'none';
+    setTimeout(() => {
+      addMsg('Gracias por tu mensaje! Un miembro de nuestro equipo te responde pronto. Tambien podes escribirnos por WhatsApp para una respuesta inmediata.', 'bot');
+    }, 700);
+  }
+
+  function addMsg(text, type) {
+    const msgs = document.getElementById('chat-msgs');
+    const div = document.createElement('div');
+    div.className = 'msg msg-' + type;
+    div.textContent = text;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+</script>
+
+</body>
+</html>
